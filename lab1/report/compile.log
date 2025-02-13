@@ -1,0 +1,6 @@
+INFO: [VRFC 10-2263] Analyzing Verilog file "/home/ubuntu/Desktop/project_1/binary2bcd_double_dabble.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module binary2bcd_double_dabble
+INFO: [VRFC 10-2263] Analyzing Verilog file "/home/ubuntu/Desktop/project_1/binary2bcd_double_dabble-tb.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module binary2bcd_double_dabble
+WARNING: [VRFC 10-3609] overwriting previous definition of module 'binary2bcd_double_dabble' [/home/ubuntu/Desktop/project_1/binary2bcd_double_dabble.v:1]
+INFO: [VRFC 10-311] analyzing module tb_top_modeule
