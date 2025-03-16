@@ -59,8 +59,7 @@ module fir
     input   wire                     axis_clk,
     input   wire                     axis_rst_n
 );
-begin   
-
+   
 //---------------------FSM register configuration address map---------------
     reg [2:0]  ap_ctrl; 
     reg [1:0]  ap_state;
@@ -412,5 +411,4 @@ begin
                 y <= y_tmp;
         end
     end
-        
-end
+endmodule
