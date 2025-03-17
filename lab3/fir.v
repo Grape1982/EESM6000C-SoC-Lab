@@ -1,11 +1,7 @@
-`timescale 1ns / 1ps
-
 `define SS_IDLE 1'b1
 `define SS_DONE 1'b0
-
 `define SM_IDLE 1'b1
 `define SM_DONE 1'b0
-
 `define AP_PROC 2'b00
 `define AP_IDLE 2'b01
 `define AP_DONE 2'b10
