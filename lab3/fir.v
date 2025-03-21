@@ -99,7 +99,7 @@ module fir
                 end
             end
             default:
-            begin
+            begin    
                 if (awaddr == 12'd0 && wdata[0] == 1 && tlast_cnt != data_length) begin
                     next_ap_state = `AP_PROC; 
                 end
@@ -112,26 +112,20 @@ module fir
       
     always @* begin      
         /*------- ap_start --------*/
-        //ap_ctrl[0] - ap_start (r/w) command 
-        //When ap_start is programmed one, the FIR engine starts.
         if (ap_state == `AP_IDLE && awaddr == 12'd0 && wdata[0] == 1 && tlast_cnt != data_length)
             ap_ctrl[0] = 1;
         else
             ap_ctrl[0] = 0;
             
         /*-------- ap_done --------*/
-        //ap_ctrl[1] - ap_done (rwc) status 
-        //1: indicate FIR has processed all the dataset, i.e. receive last data X, and the last Y is transferred. 
-        if (sm_tvalid && sm_tlast)
+         if (sm_tvalid && sm_tlast)
             ap_ctrl[1] = 1;
         else if (ap_state == `AP_DONE)
             ap_ctrl[1] = 1;
         else
             ap_ctrl[1] = 0;
-
+        
         /*-------- ap_idle --------*/
-        //ap_ctrl[2] - ap_idle (ro) status
-        //1: indicate FIR is idle. 0: FIR is actively processing data
         if (ap_state == `AP_IDLE)
             ap_ctrl[2] = 1;
         else
@@ -140,7 +134,7 @@ module fir
     end
 
     //-------------------------data length-----------------------------
-    reg  [31:0] data_length;  // 0x10-14: data length
+    reg  [31:0] data_length; 
     wire [31:0] data_length_tmp;
     
     assign data_length_tmp = (awaddr == 8'h10)? wdata : data_length;
@@ -211,10 +205,10 @@ module fir
             AWREADY <= 0;
             WREADY  <= 0;
         end else begin
-            RVALID  <= (arvalid | rvalid & ~rready)? 1 : 0;
-            ARREADY <= (arvalid)?                    1 : 0;
-            AWREADY <= (awvalid && wvalid)?          1 : 0;
-            WREADY  <= (awvalid && wvalid)?          1 : 0;
+            RVALID  <= (arvalid && rready)? 1 : 0;
+            ARREADY <= (arvalid && rready)? 1 : 0;
+            AWREADY <= (awvalid && wvalid)? 1 : 0;
+            WREADY  <= (awvalid && wvalid)? 1 : 0;
         end   
     end
 
@@ -225,7 +219,7 @@ module fir
     assign rdata   = (araddr[7:0] == 8'd0)? ap_ctrl : tap_Do; // if read 0x00, ap_ctrl
 
     // 0x80-FF: tap parameter
-    assign tap_EN = ((awaddr[11:7] == 0) && (araddr[11:7] == 0))? 1'b0 : 1'b1;
+    assign tap_EN = (axis_rst_n)? 1'b1 : 1'b0;
     assign tap_WE = ((wvalid == 1) && (awaddr[7:0] != 0))? 4'b1111 : 4'b0000;
     assign tap_A  = (awvalid == 1)? awaddr[5:0] : tap_AR[5:0]; 
     assign tap_Di = wdata;
@@ -246,7 +240,7 @@ module fir
     
     always @(posedge axis_clk or negedge axis_rst_n) begin
         if (!axis_rst_n)
-            init_addr <= -6'd4;
+            init_addr <= -6'd04;
         else
             init_addr <= next_init_addr;
     end
