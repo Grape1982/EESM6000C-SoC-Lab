@@ -240,7 +240,7 @@ module fir
     
     always @(posedge axis_clk or negedge axis_rst_n) begin
         if (!axis_rst_n)
-            init_addr <= -6'd04;
+            init_addr <= 6'd0;
         else
             init_addr <= next_init_addr;
     end
